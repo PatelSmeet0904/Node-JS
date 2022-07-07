@@ -6,8 +6,8 @@ const countryEl = document.querySelector(".country");
 const weatherForecastEl = document.querySelector(".weather-forecast");
 const currentTempEl = document.querySelector("#current-temp");
 
-const weatherForm = document.querySelector("form");
-const search = document.querySelector("input");
+const searchInput = document.querySelector("#search-input");
+const searchButton = document.querySelector("#search-button");
 
 const days = [
   "Sunday",
@@ -33,7 +33,7 @@ const months = [
   "Dec",
 ];
 
-const API_KEY = "054c895758cd70443485f9a308d47757";
+const API_KEY = "aaa74cb61c515b9509baf2c7bef24143";
 
 setInterval(() => {
   const time = new Date();
@@ -54,34 +54,24 @@ setInterval(() => {
   dateEl.innerHTML = days[day] + ", " + date + " " + months[month];
 }, 1000);
 
-weatherForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const address = search.value;
-  fetch(
-    `https://api.openweathermap.org/data/2.5/weather?q=${address}&appid=${API_KEY}`
-  )
-    .then((res) => res.json())
-    .then((data) => {
-      getWeatherData(data);
-    });
-});
+getWeatherData();
+function getWeatherData() {
+  navigator.geolocation.getCurrentPosition((success) => {
+    let { latitude, longitude } = success.coords;
 
-function getWeatherData(data) {
-  console.log(data);
-  let { lon, lat } = data.coord;
-
-  fetch(
-    `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,minutely&units=metric&appid=${API_KEY}`
-  )
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data);
-      showWeatherData(data);
-    });
+    fetch(
+      `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,minutely&units=metric&appid=${API_KEY}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        showWeatherData(data);
+      });
+  });
 }
 
 function showWeatherData(data) {
-  let { weather,humidity, pressure, temp, wind_speed } = data.current;
+  let { weather, humidity, pressure, temp, wind_speed } = data.current;
 
   timezone.innerHTML = data.timezone;
   countryEl.innerHTML = data.lat + "N " + data.lon + "E";
@@ -147,9 +137,7 @@ function showWeatherData(data) {
     if (idx == 0) {
       currentTempEl.innerHTML = `
           <div class="today">
-            <img src="http://openweathermap.org/img/wn//${
-              day.weather[0].icon
-            }@4x.png" alt="weather icon" class="w-icon">
+            <img src="http://openweathermap.org/img/wn//${day.weather[0].icon}@4x.png" alt="weather icon" class="w-icon">
             <div class="other">
                 <div class="day">Today</div>
                 <div class="temp">Night - ${day.temp.night}&#176;C</div>

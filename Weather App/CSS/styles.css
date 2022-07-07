@@ -7,6 +7,44 @@ body {
 
 }
 
+.nav-bar{
+  background-color: white;
+}
+
+::placeholder {
+  color: black;
+  opacity: 1;
+}
+
+#main{
+  padding: 15% 0%;
+  color: white;
+  font-style: Quicksand;
+}
+
+.main-row{
+  margin: 0px;
+}
+
+.main-h1, .main-h3{
+  padding: 10px;
+}
+
+.main-place{
+  background-color: white;
+  border-radius: 10px;
+  padding: 30px 0px;
+}
+
+.main-para{
+  color: black;
+}
+
+.btn-outline-warning{
+  padding-left: 30px;
+  padding-right:30px;
+}
+
 /* css of section (present-weather-details) */
 
 .present-details {
